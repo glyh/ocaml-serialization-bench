@@ -76,12 +76,42 @@ module CapnprotoBench = Serializable.Bench (struct
     | _ -> failwith "no frame extracted"
 end)
 
+module CapnprotoPackingBench = Serializable.Bench (struct
+  module CapnpMessage = Message_cp.Make (Capnp.BytesMessage)
+
+  type t = int64 list
+
+  let name = "int64 list"
+  let backend = "capnproto packing"
+
+  let serialize (lst : t) : string =
+    let open CapnpMessage.Builder.Int64List in
+    let rw = init_root () in
+    values_set_list rw lst |> ignore;
+    let message = to_message rw in
+    Capnp.Codecs.serialize ~compression:`Packing message
+
+  let deserialize (s : string) : t =
+    let open CapnpMessage.Reader.Int64List in
+    let stream = Capnp.Codecs.FramedStream.of_string ~compression:`Packing s in
+    let res = Capnp.Codecs.FramedStream.get_next_frame stream in
+    match res with
+    | Result.Ok msg -> of_message msg |> values_get |> Capnp.Array.to_list
+    | _ -> failwith "no frame extracted"
+end)
+
 let () =
   Random.init (Time_now.nanoseconds_since_unix_epoch () |> Int63.to_int_exn);
-  let lst =
-    List.init 500000000 ~f:(fun _ ->
-        rand_int64_of_range (-2100000000L) 2100000000L)
-  in
+  let len = 50000000 in
+  let min = -2100000000L in
+  let max = 2100000000L in
+  let lst = List.init len ~f:(fun _ -> rand_int64_of_range min max) in
+  Printf.printf
+    "Trying to test serialization on int64 list of length %d sampled from \
+     [%Ld, %Ld)\n"
+    len min max;
   BinProtBench.bench_round lst;
   YojsonBench.bench_round lst;
-  ProtobufBench.bench_round lst
+  ProtobufBench.bench_round lst;
+  CapnprotoBench.bench_round lst;
+  CapnprotoPackingBench.bench_round lst

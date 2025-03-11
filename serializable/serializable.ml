@@ -19,13 +19,13 @@ module Bench (S : Serializable) = struct
     result
 
   let bench_serialize (v : S.t) =
-    let label = Printf.sprintf "string serializing %s" S.name in
+    let label = Printf.sprintf "serializing %s" S.name in
     let result = time_it label (fun _ -> S.serialize v) in
-    Printf.printf "Serialization result has length %d" (String.length result);
+    Printf.printf "Serialization result has length %d\n" (String.length result);
     result
 
   let bench_deserialize (buf : string) =
-    let label = Printf.sprintf "string deserializing %s" S.name in
+    let label = Printf.sprintf "deserializing %s" S.name in
     let result = time_it label (fun _ -> S.deserialize buf) in
     result
 
