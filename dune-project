@@ -26,7 +26,13 @@
    (bin_prot (= v0.16.0))
    (ppx_bin_prot (= v0.16.0))
 
-   (capnp (= 3.6.0)))
+   (capnp (= 3.6.0))
+
+   (ppx_deriving_yojson (= 3.9.1))
+
+   (ocaml-protoc (= 3.1.1))
+   (pbrt (= 3.1.1)))
+
  (tags
   (serialization benchmark)))
 
