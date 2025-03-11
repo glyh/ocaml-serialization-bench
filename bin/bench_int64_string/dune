@@ -1,5 +1,5 @@
 (executable
- (public_name bench_int64_list)
+ (public_name bench_string)
  (name main)
  (libraries core random serializable bin_prot pbrt capnp)
  (preprocess (pps ppx_bin_prot ppx_deriving_yojson)))

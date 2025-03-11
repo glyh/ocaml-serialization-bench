@@ -22,6 +22,7 @@
  (depends 
    (ocaml (= 4.14.0))
    (core (= v0.16.2))
+   (random (= 0.0.1))
 
    (bin_prot (= v0.16.0))
    (ppx_bin_prot (= v0.16.0))
