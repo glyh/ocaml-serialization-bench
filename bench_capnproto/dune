@@ -1,0 +1,4 @@
+(executable
+ (public_name bench_capnproto)
+ (name main)
+ (libraries core capnp))

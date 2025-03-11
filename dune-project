@@ -21,9 +21,12 @@
  (description "A benchmark for ocaml serialization formats")
  (depends 
    (ocaml (= 4.14.0))
+   (core (= v0.16.2))
+
    (bin_prot (= v0.16.0))
    (ppx_bin_prot (= v0.16.0))
-   (core (= v0.16.2)))
+
+   (capnp (= 3.6.0)))
  (tags
   (serialization benchmark)))
 

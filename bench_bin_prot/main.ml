@@ -1,9 +1,11 @@
 open Core
 open Bin_prot.Std
 
-let rand_int_of_range min max = min + Random.int (max - min)
+let rand_int64_of_range (lower : int64) (upper : int64) =
+  let open Int64 in
+  lower + Random.int64 (upper - lower)
 
-module type Binable = sig
+module type Binprotable = sig
   type t
 
   val name : string
@@ -12,7 +14,7 @@ module type Binable = sig
   val bin_write_t : t Bin_prot.Write.writer
 end
 
-module BenchBinable (B : Binable) = struct
+module BenchBinprot (B : Binprotable) = struct
   let time_it label f =
     let start_time = Time_ns.now () in
     let result = f () in
@@ -38,22 +40,23 @@ module BenchBinable (B : Binable) = struct
     bench_deserialize serialized |> ignore
 end
 
-module IntList = struct
-  type t = int list [@@deriving bin_io]
+module Int64List = struct
+  type t = int64 list [@@deriving bin_io]
 
   let len = 50000000
-  let min = -2147483648
-  let max = 2147483647
+  let min = -2147483648L
+  let max = 2147483647L
 
   let name =
     Printf.sprintf
-      "int list of len %d filled with element sampled from [%d, %d)" len min max
+      "int64 list of len %d filled with element sampled from [%Ld, %Ld)" len min
+      max
 
-  let generate () : t = List.init len ~f:(fun _ -> rand_int_of_range min max)
+  let generate () : t = List.init len ~f:(fun _ -> rand_int64_of_range min max)
 end
 
-module IntListBench = BenchBinable (IntList)
+module Int64ListBench = BenchBinprot (Int64List)
 
 let () =
   Random.init (Time_now.nanoseconds_since_unix_epoch () |> Int63.to_int_exn);
-  IntListBench.bench_round (IntList.generate ())
+  Int64ListBench.bench_round (Int64List.generate ())
