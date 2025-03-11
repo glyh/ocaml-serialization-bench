@@ -1,0 +1,14 @@
+message MerkleTree {
+  required int64 hash = 1; // Stores the hash value
+
+  oneof kind {
+    Empty leaf = 2;        // Leaf node (no children)
+    Children internal = 3; // Internal node with children
+  }
+}
+
+message Empty {} // Placeholder for leaf nodes
+
+message Children {
+  repeated MerkleTree children = 1; // List of child nodes
+}

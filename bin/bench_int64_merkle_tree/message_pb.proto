@@ -1,1 +1,0 @@
-message Str { required string str = 1; }
