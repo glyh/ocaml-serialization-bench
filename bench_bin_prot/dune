@@ -1,0 +1,5 @@
+(executable
+ (public_name bench_bin_prot)
+ (name main)
+ (libraries bin_prot core)
+ (preprocess (pps ppx_bin_prot)))
