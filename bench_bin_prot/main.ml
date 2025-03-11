@@ -24,12 +24,12 @@ module BenchBinable (B : Binable) = struct
   let bench_serialize (v : B.t) =
     let sz = B.bin_size_t v in
     let buf = Bin_prot.Common.create_buf sz in
-    let label = Printf.sprintf "serializing %s" B.name in
+    let label = Printf.sprintf "byte serializing %s" B.name in
     let _ = time_it label (fun _ -> B.bin_write_t buf ~pos:0 v) in
     buf
 
   let bench_deserialize (buf : Bin_prot.Common.buf) =
-    let label = Printf.sprintf "deserializing %s" B.name in
+    let label = Printf.sprintf "byte deserializing %s" B.name in
     let result = time_it label (fun _ -> B.bin_read_t buf ~pos_ref:(ref 0)) in
     result
 
