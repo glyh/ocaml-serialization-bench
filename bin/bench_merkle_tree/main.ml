@@ -131,7 +131,7 @@ module CapnprotoPackingBench = Serializable.Bench (struct
   type t = merkle_tree
 
   let name = "string"
-  let backend = "capnproto"
+  let backend = "capnproto packing"
 
   open CapnpMessage.Builder
 
